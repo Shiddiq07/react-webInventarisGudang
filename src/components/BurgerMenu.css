@@ -1,0 +1,120 @@
+.burger-menu-container {
+    position: relative;
+  }
+  
+  .burger-button {
+    position: fixed; /* Atau absolute, tergantung layout */
+    top: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 100; /* Pastikan di atas menu samping dan overlay */
+  }
+  
+  .bar {
+    width: 30px;
+    height: 2px;
+    background-color: #333; /* Warna garis burger */
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .burger-button.open .bar:nth-child(1) {
+    transform: translateY(10px) rotate(45deg);
+  }
+  
+  .burger-button.open .bar:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .burger-button.open .bar:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg);
+  }
+  
+  .side-menu {
+    position: fixed;
+    top: 0;
+    left: -300px; /* Lebar menu */
+    width: 300px;
+    height: 100%;
+    background-color: #f0f0f0; /* Warna background menu */
+    padding-top: 60px; /* Beri ruang untuk tombol close */
+    transition: transform 0.3s ease-in-out;
+    z-index: 90; /* Di bawah tombol burger tapi di atas konten utama */
+  }
+  
+  .side-menu.open {
+    transform: translateX(300px);
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 2em;
+    color: #333;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 101; /* Di atas menu samping */
+  }
+  
+  .side-menu nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .side-menu nav ul li.menu-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+  }
+  
+  .side-menu nav ul li.menu-item:last-child {
+    border-bottom: none;
+  }
+  
+  .side-menu nav ul li.menu-item .sub-menu {
+    list-style: none;
+    padding-left: 20px;
+    margin-top: 5px;
+    display: block;
+    /* display: none; Secara default sub-menu tersembunyi */
+  }
+  
+  /* .side-menu nav ul li.menu-item:hover .sub-menu {
+    display: block; Tampilkan sub-menu saat hover (opsional) 
+  }
+   */
+  .side-menu nav ul li.menu-item .sub-menu li.sub-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9em;
+    color: #666;
+  }
+  
+  .side-menu nav ul li.menu-item .sub-menu li.sub-item:last-child {
+    border-bottom: none;
+  }
+  
+  .menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Gelapkan background */
+    z-index: 80; /* Di bawah menu samping */
+    display: none; /* Sembunyikan secara default */
+  }
+  
+  .menu-overlay {
+    display: block; /* Tampilkan saat menu terbuka */
+  }
