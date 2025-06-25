@@ -51,12 +51,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             break;
         case "DELETE":
             try {
-                 const validasiHapus = await db.collection('barang').findOne({ _id: id });
-                const kodeBarang = validasiHapus?.kodeBarang;
-                console.log( kodeBarang);
-                const hapusLanjutan = await db.collection('inventaris').find({ kodeBarang: kodeBarang }).toArray();
-                console.log( hapusLanjutan);
-                if (hapusLanjutan == null || hapusLanjutan.length === 0) {
+                 const cekNamaPengguna = await db.collection('pengguna').findOne({ _id: id });
+                 
+                const nama = cekNamaPengguna?.nama;
+                console.log( cekNamaPengguna);
+                //cek nama di inventaris
+             
+                const cekInventaris = await db.collection('inventaris').find({ created_by: nama }).toArray();
+                console.log( cekInventaris);
+
+                //cek nama di barang
+                 const cekBarang = await db.collection('barang').find({ created_by: nama }).toArray();
+
+                 //ceknama di 
+                  const cekPermintaan = await db.collection('permintaan').find({ namaPemohon: nama }).toArray();
+
+                if (cekInventaris.length === 0 && cekPermintaan.length === 0 && cekBarang.length === 0) {
                 const resDelete = await db.collection("pengguna").deleteOne({
                     _id: id
                 });
