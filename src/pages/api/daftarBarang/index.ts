@@ -18,10 +18,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     switch (req.method) {
+        
         case "POST":
             try {
                 const body = JSON.parse(req.body);
-                if (typeof body !== "object") {
+                const validasi = await db.collection('barang').findOne({ namaBarang: body.namaBarang }); 
+
+                 if (typeof body !== "object") {
                     throw new Error('invalid request');
                 }
 
@@ -34,6 +37,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 if (body.satuan === "") {
                     throw new Error('satuan is required');
                 }
+
+
+                    if (validasi) {
+                        throw new Error('nama barang sudah ada'); // Jika ditemukan, artinya duplikat
+                    }else {
+
                 await getNextKodeBarang(db, body.namaKategori);
                 const isiId = `kodeBarangCounter_${body.namaKategori.replace(/\s+/g, '')}`; // Membuat ID counter unik per kategori
 
@@ -56,6 +65,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 let barang = await db.collection("barang").insertOne(barangData);
                 res.status(200).json({ data: barang, message: 'data berhasil di simpan' });
 
+                    }
+            
             } catch (err: any) {
                 res.status(422).json({ message: err.message });
             }

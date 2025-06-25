@@ -13,6 +13,7 @@ export default function AdminBarang() {
   const [barang, setKategori] = useState([]); // Stores all barang
   const [isOkOnly, setIsOkOnly] = useState(true);
   const [deleteId, setDeleteId] = useState(null);
+  const [kodeBarang, setKodeBarang] = useState(null);
   const [searchTerm,setSearchTerm]=useState('')
   const [data,setData]=useState([])
   const [filteredData,setFilteredData]=useState([])
@@ -23,8 +24,9 @@ export default function AdminBarang() {
         router.push('/admin/daftarBarang/form')
     }
 
-    const onConfirmDelete=(id)=>{
+    const onConfirmDelete=(id,kodeBarang)=>{
         setDeleteId(id)
+        setKodeBarang(kodeBarang)
         setIsOkOnly(false)
         setModalTitle('Confirm')
         setModalMessage('Apakah and yakin ingin menghapus data ini?')
@@ -39,6 +41,7 @@ export default function AdminBarang() {
 
     const onConfirmOk=async ()=>{
         try{
+      
             const res = await fetch(`/api/daftarBarang/${deleteId}`,{method:'DELETE'});
             let data = await res.json()
 
@@ -53,7 +56,7 @@ export default function AdminBarang() {
             setModalTitle('Err')
             setModalMessage(err.message)
         }
-
+    
     }
 
 
@@ -135,7 +138,7 @@ export default function AdminBarang() {
                                             Edit
                                         </button>
                                         <button 
-                                            onClick={()=>onConfirmDelete(item._id)}
+                                            onClick={()=>onConfirmDelete(item._id,item.kodeBarang)}
                                             className="bg-red-300 hover:bg-red-400 text-gray-800 py-2 px-4 rounded-r">
                                             Delete
                                         </button>

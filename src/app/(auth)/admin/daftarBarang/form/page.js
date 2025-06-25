@@ -1,11 +1,13 @@
 'use client'
-import { create } from 'domain';
+// import { create } from 'domain';
 import Card from '../../../../../components/card';
+import { useRouter } from 'next/navigation';
+
 import ConfigDialog from '../../../../../components/ConfirmDialog'
 import { useState ,useRef} from 'react'
 
 export default function AdminKategoriForm() {
-    const editorRef = useRef(null);
+        const router= useRouter()
     const [modal, setModal] = useState(false)
     const [modalTitle, setModalTitle] = useState("")
     const [modalMessage, setModalMessage] = useState("")
@@ -42,9 +44,22 @@ export default function AdminKategoriForm() {
     }
     const onOkOnly=()=>{
         setModal(false)
-        router.push('/admin/daftarBarang')
+        router.push('/admin/daftarBarang/')
     }
+const validasi=()=>{
+ setModal(true)
+         setIsOkOnly(false)
 
+                setModalTitle('Confirm')
+                setModalMessage(`Apakah Anda yakin ingin menyimpan ${namaBarang.value} sebagai ${namaKategori.value} dengan satuan ${satuan.value}?`)
+
+            }
+
+  const onConfirmOk = () => {
+onSubmitData()
+
+        setModal(false)
+  }
     async function onSubmitData() {
         try{
             
@@ -61,12 +76,16 @@ export default function AdminKategoriForm() {
                 throw Error(resData.message)
                 }
                 setModal(true)
+                         setIsOkOnly(true)
+
                 setModalTitle('Info')
                 setModalMessage(resData.message)
         }catch(err){
           console.error("ERR", err.message)
           setModal(true)
           setModalTitle('Err')
+                   setIsOkOnly(true)
+
           setModalMessage(err.message)
         }
       }
@@ -130,7 +149,7 @@ export default function AdminKategoriForm() {
                             </div>
                         </div>
           
-            <button  className="btn-primary" onClick={onSubmitData}>
+            <button  className="btn-primary" onClick={validasi}>
                 <span className="relative text-sm font-semibold text-white">
                     Save Data
                 </span>

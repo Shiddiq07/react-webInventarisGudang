@@ -95,7 +95,7 @@ export default async function middleware(req: NextRequest) {
         } catch (error) {
             console.error("JWT Verification Failed:", error);
             // Token tidak valid, hapus cookie dan redirect ke login
-            const res = NextResponse.redirect(new URL('/login', req.nextUrl));
+            const res = NextResponse.redirect(new URL('/', req.nextUrl));
             res.cookies.delete(process.env.AUTH_COOKIE_NAME!);
             return res;
         }

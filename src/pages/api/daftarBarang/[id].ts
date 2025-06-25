@@ -51,7 +51,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             break;
         case "DELETE":
             try {
-                const resDelete = await db.collection("barang").deleteOne({
+                const validasiHapus = await db.collection('barang').findOne({ _id: id });
+                const kodeBarang = validasiHapus?.kodeBarang;
+                console.log( kodeBarang);
+                const hapusLanjutan = await db.collection('inventaris').find({ kodeBarang: kodeBarang }).toArray();
+                console.log( hapusLanjutan);
+                if (hapusLanjutan == null || hapusLanjutan.length === 0) {
+                    const resDelete = await db.collection("barang").deleteOne({
                     _id: id
                 });
 
@@ -60,6 +66,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
 
                 res.json({ data: [resDelete], message: "data berhasil dihapus" });
+                    
+                }else {
+                    res.status(422).json({ message: "Barang tidak bisa dihapus karena masih ada inventaris yang terkait" });
+                }
+                
             } catch (err: any) {
                 res.status(422).json({ message: err.message });
             }
