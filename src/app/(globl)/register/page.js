@@ -23,7 +23,7 @@ export default function Register(){
         let response = await res.json()
 
         if(res.status == 200){
-            router.push('/login')
+            router.push('/')
         }
     }
 
@@ -119,7 +119,7 @@ export default function Register(){
 
                     <p className="mt-10 text-center text-sm text-gray-500">
                         Already have account?{' '}
-                        <a href="/login" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                        <a href="/" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
                             login noew
                         </a>
                     </p>

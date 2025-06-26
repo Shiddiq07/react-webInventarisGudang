@@ -103,7 +103,7 @@ export default async function middleware(req: NextRequest) {
 
     // 6. Jika rute dilindungi dan tidak ada token valid, redirect ke login
     if (isProtectedRoute && !token) {
-        return NextResponse.redirect(new URL('/login', req.nextUrl));
+        return NextResponse.redirect(new URL('/', req.nextUrl));
     }
 
     // Jika bukan rute yang dilindungi, atau token ada dan valid, lanjutkan

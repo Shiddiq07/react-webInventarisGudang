@@ -16,7 +16,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             try {
                 const filter = { _id: id };
                 const body = JSON.parse(req.body);
-                
+                   const validasiEdit = await db.collection('barang').findOne({ _id: id });
+                const kodeBarang = validasiEdit?.kodeBarang;
+                console.log( kodeBarang);
+                const validasiLanjutan = await db.collection('inventaris').find({ kodeBarang: kodeBarang }).toArray();
+                 if (typeof body !== "object") {
+                    throw new Error('invalid request');
+                }
+
+                if (body.namaKategori === "") {
+                    throw new Error('kategori is required');
+                }
+                if (body.namaBarang === "") {
+                    throw new Error('nama barang is required');
+                }
+                if (body.satuan === "") {
+                    throw new Error('satuan is required');
+                }
+
+
+                    if (validasiLanjutan == null || validasiLanjutan.length === 0) {
                 const updateDoc: any = {
                     $set: {
                         namaKategori: body.namaKategori,
@@ -27,7 +46,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     },
                 };
 
-                // Hanya set password jika body.password ada
                 if (body.created_at) {
                     updateDoc.$set.created_at = body.created_at;
                 }
@@ -45,6 +63,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     .updateOne(filter, updateDoc, { upsert: true });
 
                 res.status(200).json({ data: [barang], message: 'data berhasil di perbaharui' });
+            }else {
+                    res.status(422).json({ message: "Barang tidak dapat diedit dikarenakan data sudah dikaitkan dengan transaksi lain" });
+                }
             } catch (err: any) {
                 res.status(422).json({ message: err.message });
             }
@@ -68,7 +89,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 res.json({ data: [resDelete], message: "data berhasil dihapus" });
                     
                 }else {
-                    res.status(422).json({ message: "Barang tidak bisa dihapus karena masih ada inventaris yang terkait" });
+                    res.status(422).json({ message: "Barang tidak dapat dihapus dikarenakan data sudah dikaitkan dengan transaksi lain" });
                 }
                 
             } catch (err: any) {

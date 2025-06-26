@@ -18,7 +18,12 @@ export default function EditDaftarBarang() {
         updated_at:new Date()
     });
 
-
+ const satuanOptions = {
+    'ATK': ['Pcs', 'Box', 'Pack', 'Set', 'Rim', 'Buah', 'Lusin', 'Papan', 'Lembar'], // Tambah 'Lembar' untuk ATK jika relevan
+    'RTK': ['Pcs', 'Botol', 'Liter', 'Meter', 'Rol', 'Buah', 'Pack', 'Sachet', 'Dus', 'Gram', 'Kg'], // Tambah 'Gram', 'Kg' untuk RTK jika relevan
+    // Tambahkan kategori lain jika Anda memiliki lebih dari ATK dan RTK
+    '': [], // Jika tidak ada kategori yang dipilih, daftar satuan kosong
+};
     const fetchDataById = async ()=>{
         try{
             const res = await fetch(`/api/daftarBarang/${params.id}`);
@@ -42,25 +47,49 @@ export default function EditDaftarBarang() {
         router.push('/admin/daftarBarang')
     }
 
-    const inputHandler= (e) =>{
-        setData({...data, [e.target.name]: e.target.value })
+   const inputHandler = (e) => {
+        const { name, value } = e.target;
+        setData(prevData => {
+            if (name === 'namaKategori') {
+                // Jika kategori berubah, reset satuan
+                return { ...prevData, [name]: value, satuan: '' };
+            }
+            return { ...prevData, [name]: value };
+        });
     }
 
-    const onSubmitData= async ()=>{
 
+    const onSubmitData= async ()=>{
+  try{
         const res =  await fetch(`/api/daftarBarang/${data._id}`,{
             method:'PUT',
             body: JSON.stringify(data),
         })
-        let response = await res.json()
+        let resData = await res.json()
+ if (!res.ok) { // Cek res.ok untuk status HTTP >= 200 dan < 300
+                throw Error(resData.message)
+                }
+                setModal(true)
+                         setIsOkOnly(true)
 
-      
+                setModalTitle('Info')
+                setModalMessage(resData.message)
+      }catch(err){
+          console.error("ERR", err.message)
+          setModal(true)
+          setModalTitle('Err')
+                   setIsOkOnly(true)
+
+          setModalMessage(err.message)
+        }
     }
 
     useEffect(()=>{
         fetchDataById()
     },[])
-
+ // 3. Dapatkan daftar satuan yang tersedia berdasarkan kategori yang dipilih
+    // Menggunakan lowercase untuk mencocokkan nilai 'value' di option kategori
+    const availableSatuan = satuanOptions[data.namaKategori.toUpperCase()] || [];
    return (
       <>
   
@@ -108,14 +137,13 @@ export default function EditDaftarBarang() {
                                       onChange={inputHandler}
                                       className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                   >
-                                        <option value="">--pilih--</option>
-                                        <option value="pcs">PCS</option>
-                                        <option value="botol">Botol</option>
-                                        <option value="rim">Rim</option>
-                                        <option value="lembar">Lembar</option>
-                                        <option value="box">Box</option>
-                                        <option value="pack">Pack</option>
-                                        <option value="disc">Disc</option>
+                                                   <option value="">--pilih--</option>
+                            {/* Loop melalui satuan yang tersedia berdasarkan kategori yang dipilih */}
+                            {availableSatuan.map(satuan => (
+                                <option key={satuan} value={satuan}>
+                                    {satuan}
+                                </option>
+                            ))}
           </select>
                               </div>
                           </div>

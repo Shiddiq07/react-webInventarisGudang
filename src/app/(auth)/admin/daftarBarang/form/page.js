@@ -12,7 +12,12 @@ export default function AdminKategoriForm() {
     const [modalTitle, setModalTitle] = useState("")
     const [modalMessage, setModalMessage] = useState("")
     const [isOkOnly, setIsOkOnly] = useState(true)
-    
+    const satuanOptions = {
+    'ATK': ['Pcs', 'Box', 'Pack', 'Set', 'Rim', 'Buah', 'Lusin', 'Papan', 'Lembar'], // Tambah 'Lembar' untuk ATK jika relevan
+    'RTK': ['Pcs', 'Botol', 'Liter', 'Meter', 'Rol', 'Buah', 'Pack', 'Sachet', 'Dus', 'Gram', 'Kg'], // Tambah 'Gram', 'Kg' untuk RTK jika relevan
+    // Tambahkan kategori lain jika Anda memiliki lebih dari ATK dan RTK
+    '': [], // Jika tidak ada kategori yang dipilih, daftar satuan kosong
+};
     const [data, setData] = useState({
     namaKategori:'',
     namaBarang:'',
@@ -32,9 +37,17 @@ export default function AdminKategoriForm() {
         })
     }
 
-    const inputHandler= (e) =>{
-        setData({...data, [e.target.name]: e.target.value })
+    const inputHandler = (e) => {
+        const { name, value } = e.target;
+        setData(prevData => {
+            if (name === 'namaKategori') {
+                // Jika kategori berubah, reset satuan
+                return { ...prevData, [name]: value, satuan: '' };
+            }
+            return { ...prevData, [name]: value };
+        });
     }
+
 
     const onCancel=()=>{
         setModal(false)
@@ -47,18 +60,26 @@ export default function AdminKategoriForm() {
         router.push('/admin/daftarBarang/')
     }
 const validasi=()=>{
- setModal(true)
-         setIsOkOnly(false)
+  // 5. Perbaiki akses nilai dari state 'data'
+        if (!data.namaKategori || !data.namaBarang || !data.satuan) {
+            setModal(true);
+            setIsOkOnly(true); // Ini adalah info/error, jadi OK Only
+            setModalTitle('Validasi Input');
+            setModalMessage('Harap lengkapi semua bidang: Kategori, Nama Barang, dan Satuan.');
+            return; // Hentikan proses jika ada input yang kosong
+        }
 
-                setModalTitle('Confirm')
-                setModalMessage(`Apakah Anda yakin ingin menyimpan ${namaBarang.value} sebagai ${namaKategori.value} dengan satuan ${satuan.value}?`)
+        setModal(true)
+        setIsOkOnly(false) // Ini adalah konfirmasi, jadi bukan OK Only (ada Cancel)
 
-            }
+        setModalTitle('Konfirmasi Penyimpanan')
+        setModalMessage(`Apakah Anda yakin ingin menyimpan "${data.namaBarang}" sebagai kategori "${data.namaKategori.toUpperCase()}" dengan satuan "${data.satuan.toUpperCase()}"?`)
+    }
 
   const onConfirmOk = () => {
 onSubmitData()
 
-        setModal(false)
+         setModal(false) // Modal ditutup setelah konfirmasi (dan onSubmitData dipanggil)
   }
     async function onSubmitData() {
         try{
@@ -66,13 +87,14 @@ onSubmitData()
                 const body = data
                
                 let res = await fetch('/api/daftarBarang', {
-                    method:'POST',
-                    body: JSON.stringify(body),
-                })
-
-                
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', // Penting: tambahkan header ini
+                },
+                body: JSON.stringify(body),
+            })
                 let resData = await res.json()
-                if(!resData.data){
+            if (!res.ok) { // Cek res.ok untuk status HTTP >= 200 dan < 300
                 throw Error(resData.message)
                 }
                 setModal(true)
@@ -80,6 +102,7 @@ onSubmitData()
 
                 setModalTitle('Info')
                 setModalMessage(resData.message)
+                 clearData()
         }catch(err){
           console.error("ERR", err.message)
           setModal(true)
@@ -89,7 +112,9 @@ onSubmitData()
           setModalMessage(err.message)
         }
       }
-
+ // 3. Dapatkan daftar satuan yang tersedia berdasarkan kategori yang dipilih
+    // Menggunakan lowercase untuk mencocokkan nilai 'value' di option kategori
+    const availableSatuan = satuanOptions[data.namaKategori.toUpperCase()] || [];
     return (
     <>
 
@@ -107,9 +132,13 @@ onSubmitData()
                                     onChange={inputHandler}
                                     className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 >
-                                      <option value="">--pilih--</option>
-                                      <option value="atk">ATK</option>
-                                      <option value="rtk">RTK</option>
+                                         <option value="">--pilih--</option>
+                            {/* Loop melalui kunci (kategori) dari satuanOptions */}
+                            {Object.keys(satuanOptions).filter(key => key !== '').map(kategori => (
+                                <option key={kategori} value={kategori}>
+                                    {kategori}
+                                </option>
+                            ))}
         </select>
                             </div>
                         </div>
@@ -134,17 +163,18 @@ onSubmitData()
                                     name="satuan"
                                     value={data.satuan}
                                     required
+                                     disabled={!data.namaKategori}
+
                                     onChange={inputHandler}
                                     className="pl-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 >
                                       <option value="">--pilih--</option>
-                                      <option value="pcs">PCS</option>
-                                      <option value="botol">Botol</option>
-                                      <option value="rim">Rim</option>
-                                      <option value="lembar">Lembar</option>
-                                      <option value="box">Box</option>
-                                      <option value="pack">Pack</option>
-                                      <option value="disc">Disc</option>
+                            {/* Loop melalui satuan yang tersedia berdasarkan kategori yang dipilih */}
+                            {availableSatuan.map(satuan => (
+                                <option key={satuan} value={satuan}>
+                                    {satuan}
+                                </option>
+                            ))}
         </select>
                             </div>
                         </div>

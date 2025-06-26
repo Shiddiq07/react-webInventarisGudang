@@ -6,7 +6,7 @@ export default function PublicMenu() {
     const router = useRouter()
 
     const onLoginPage=()=>{
-      router.push('/login', { scroll: false })
+      router.push('/', { scroll: false })
     }
 
     return(
