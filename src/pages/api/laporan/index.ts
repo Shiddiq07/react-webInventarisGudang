@@ -153,8 +153,8 @@ export default async function handler(
 
     // --- Eksekusi Query Inventaris (Agregasi dengan $match) ---
     // Karena dateMatchStage mengandung $expr, kita harus menggunakan aggregate dengan $match
-    const dataInventarisMasuk = await inventarisCollection.aggregate([{ $match: filterInventarisMasuk }]).toArray();
-    const dataInventarisKeluar = await inventarisCollection.aggregate([{ $match: filterInventarisKeluar }]).toArray();
+    const dataInventarisMasuk = (await inventarisCollection.aggregate([{ $match: filterInventarisMasuk }]).toArray()) as LaporanItem[];
+    const dataInventarisKeluar = (await inventarisCollection.aggregate([{ $match: filterInventarisKeluar }]).toArray()) as LaporanItem[];
 
     console.log(`Query executed. Found ${dataInventarisMasuk.length} incoming and ${dataInventarisKeluar.length} outgoing items.`);
 
