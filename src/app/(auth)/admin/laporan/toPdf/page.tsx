@@ -284,25 +284,26 @@ export default function StockOpnameTable () {
             currentY += 10; // Geser Y untuk tabel
 
             // Siapkan body tabel untuk kategori ini
-            const body = categoryData.items.map(item => [
-                item.no,
-                item.kodeBarang,
-                item.namaBarang,
-                item.satuan,
-                item.kategoriBarang,
-                item.stokMasuk.toLocaleString('id-ID'),
-                item.stokKeluar.toLocaleString('id-ID'),
-                item.jumlahStok.toLocaleString('id-ID'),
-            ]);
+           const body = categoryData.items.map(item => [
+    { content: item.no },
+    { content: item.kodeBarang },
+    { content: item.namaBarang },
+    { content: item.satuan },
+    { content: item.kategoriBarang },
+    { content: item.stokMasuk.toLocaleString('id-ID') },
+    { content: item.stokKeluar.toLocaleString('id-ID') },
+    { content: item.jumlahStok.toLocaleString('id-ID') }
+]);
 
-            // Tambahkan baris sub-total untuk kategori ini
-            const subTotalRow = [
-                { content: `Sub Total ${categoryName}`, colSpan: 5, styles: { fontStyle: 'bold', halign: 'right', fillColor: [220, 220, 220] } },
-                { content: categoryData.totalMasuk.toLocaleString('id-ID'), styles: { fontStyle: 'bold', halign: 'center', fillColor: [220, 220, 220] } },
-                { content: categoryData.totalKeluar.toLocaleString('id-ID'), styles: { fontStyle: 'bold', halign: 'center', fillColor: [220, 220, 220] } },
-                { content: categoryData.totalJumlah.toLocaleString('id-ID'), styles: { fontStyle: 'bold', halign: 'center', fillColor: [220, 220, 220] } },
-            ];
-            body.push(subTotalRow); // Tambahkan sub total ke body tabel ini
+// Tambahkan baris sub-total untuk kategori ini
+const subTotalRow = [
+    { content: `Sub Total ${categoryName}`, colSpan: 5, styles: { fontStyle: 'bold', halign: 'right', fillColor: [220, 220, 220] } },
+    { content: categoryData.totalMasuk.toLocaleString('id-ID'), styles: { fontStyle: 'bold', halign: 'center', fillColor: [220, 220, 220] } },
+    { content: categoryData.totalKeluar.toLocaleString('id-ID'), styles: { fontStyle: 'bold', halign: 'center', fillColor: [220, 220, 220] } },
+    { content: categoryData.totalJumlah.toLocaleString('id-ID'), styles: { fontStyle: 'bold', halign: 'center', fillColor: [220, 220, 220] } },
+];
+
+body.push(subTotalRow);// Tambahkan sub total ke body tabel ini
 
             // Membuat Tabel dengan data yang sudah diolah untuk kategori ini
             autoTable(doc, {
