@@ -50,6 +50,10 @@ type GroupedTableData = {
 
 
 export default function StockOpnameTable () {
+    if (useSearchParams() !== null) {
+          const searchParams = useSearchParams();
+
+    }
   const searchParams = useSearchParams();
   const bulan = searchParams?.get('bulan');
   const tahun = searchParams?.get('tahun');
