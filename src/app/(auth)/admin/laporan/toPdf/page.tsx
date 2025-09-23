@@ -257,12 +257,16 @@ export default function StockOpnameTable () {
 
     const tableOptions = {
         startY: currentY, // Akan diupdate untuk setiap tabel
-        headStyles: { fillColor: [171, 130, 204], textColor: [0, 0, 0], fontStyle: 'bold'},
+        headStyles: {
+            fillColor: [171, 130, 204] as [number, number, number],
+            textColor: [0, 0, 0] as [number, number, number],
+            fontStyle: 'bold' as const, // Type assertion to match FontStyle type
+        },
         columnStyles: {
-            0: { halign: 'center' }, // No
-            5: { halign: 'center' }, // Stok Masuk
-            6: { halign: 'center' }, // Stok Keluar
-            7: { halign: 'center' }, // Jumlah Stok
+            0: { halign: 'center' as const }, // No
+            5: { halign: 'center' as const }, // Stok Masuk
+            6: { halign: 'center' as const }, // Stok Keluar
+            7: { halign: 'center' as const }, // Jumlah Stok
         },
         margin: { left: 10, right: 10 },
         // Jangan gunakan didDrawPage di sini karena akan di-trigger setiap tabel.
