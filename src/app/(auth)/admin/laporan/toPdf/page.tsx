@@ -257,7 +257,7 @@ export default function StockOpnameTable () {
 
     const tableOptions = {
         startY: currentY, // Akan diupdate untuk setiap tabel
-        headStyles: { fillColor: [171, 130, 204], textColor: [0, 0, 0], fontStyle: 'bold' },
+        headStyles: { fillColor: [171, 130, 204], textColor: [0, 0, 0], fontStyle: 'bold'},
         columnStyles: {
             0: { halign: 'center' }, // No
             5: { halign: 'center' }, // Stok Masuk
