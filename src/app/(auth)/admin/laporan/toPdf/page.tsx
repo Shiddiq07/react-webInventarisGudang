@@ -51,8 +51,8 @@ type GroupedTableData = {
 
 export default function StockOpnameTable () {
   const searchParams = useSearchParams();
-  const bulan = searchParams.get('bulan');
-  const tahun = searchParams.get('tahun');
+  const bulan = searchParams?.get('bulan');
+  const tahun = searchParams?.get('tahun');
 
   const [inventarisMasukData, setInventarisMasukData] = useState<LaporanItem[]>([]);
   const [inventarisKeluarData, setInventarisKeluarData] = useState<LaporanItem[]>([]);
