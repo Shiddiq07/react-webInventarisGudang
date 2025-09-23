@@ -1,4 +1,4 @@
-// "use client"; // Untuk Next.js App Router
+"use client"; // Untuk Next.js App Router
 
 import React, { useEffect, useState, useRef } from 'react';
 import { jsPDF } from 'jspdf';
@@ -49,14 +49,10 @@ type GroupedTableData = {
 };
 
 
-export default function StockOpnameTable ({ 
-  searchParams, // Next.js otomatis meneruskan ini
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-//   const searchParams = useSearchParams();
-  const bulan = searchParams?.bulan;
-  const tahun = searchParams?.tahun;
+export default function StockOpnameTable () {
+  const searchParams = useSearchParams();
+  const bulan = searchParams?.get('bulan');
+  const tahun = searchParams?.get('tahun');
 
   const [inventarisMasukData, setInventarisMasukData] = useState<LaporanItem[]>([]);
   const [inventarisKeluarData, setInventarisKeluarData] = useState<LaporanItem[]>([]);
@@ -244,17 +240,11 @@ export default function StockOpnameTable ({
     let periodeText;
     if (bulan && typeof bulan === 'string' && bulan.toLowerCase() === 'all') {
         periodeText = `: Tahun ${tahun}`;
-    } else if (
-        bulan &&
-        tahun &&
-        typeof bulan === 'string' &&
-        !isNaN(parseInt(bulan, 10))
-    ) {
+    } else if (bulan && tahun && !isNaN(parseInt(bulan, 10))) {
         const bulanNum = parseInt(bulan, 10);
         if (bulanNum >= 1 && bulanNum <= 12) {
-             const tahunStr = typeof tahun === 'string' ? tahun : Array.isArray(tahun) ? tahun[0] ?? '0' : '0';
-             const namaBulan = new Date(parseInt(tahunStr, 10), bulanNum - 1, 1).toLocaleDateString('id-ID', { month: 'long' });
-             periodeText = `: ${namaBulan} ${tahunStr}`;
+             const namaBulan = new Date(parseInt(tahun || '0', 10), bulanNum - 1, 1).toLocaleDateString('id-ID', { month: 'long' });
+             periodeText = `: ${namaBulan} ${tahun}`;
         } else { periodeText = `: Parameter bulan tidak valid`; }
     } else { periodeText = `: Parameter periode tidak lengkap`; }
     doc.text('Periode', 150, currentY); doc.text(periodeText, 170, currentY); currentY += 15; // Tambah spasi setelah header utama
@@ -386,16 +376,10 @@ body.push(subTotalRow);// Tambahkan sub total ke body tabel ini
            {' '}
            {bulan && typeof bulan === 'string' && bulan.toLowerCase() === 'all'
                ? `Tahun ${tahun}`
-               : (() => {
-                   const bulanStr = typeof bulan === 'string' ? bulan : Array.isArray(bulan) ? bulan[0] ?? '' : '';
-                   if (bulanStr && !isNaN(parseInt(bulanStr, 10)) && parseInt(bulanStr, 10) >= 1 && parseInt(bulanStr, 10) <= 12) {
-                       const tahunVal = typeof tahun === 'string' ? tahun : Array.isArray(tahun) ? tahun[0] ?? '0' : '0';
-                       const bulanVal = typeof bulanStr === 'string' ? bulanStr : Array.isArray(bulanStr) ? bulanStr[0] ?? '1' : '1';
-                       return new Date(parseInt(tahunVal, 10), parseInt(bulanVal, 10) - 1, 1).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
-                   } else {
-                       return bulanStr ? `Bulan "${bulanStr}" tidak valid di tahun ${tahun}` : `Pilih Bulan (1-12 atau 'all') untuk tahun ${tahun}`;
-                   }
-                 })()
+               : (bulan && !isNaN(parseInt(bulan, 10)) && parseInt(bulan, 10) >= 1 && parseInt(bulan, 10) <= 12
+                   ? new Date(parseInt(tahun || '0', 10), parseInt(bulan, 10) - 1, 1).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })
+                   : (bulan ? `Bulan "${bulan}" tidak valid di tahun ${tahun}` : `Pilih Bulan (1-12 atau 'all') untuk tahun ${tahun}`)
+                 )
            }
            </p>
        )}
