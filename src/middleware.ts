@@ -38,7 +38,10 @@ const roleBasedAccess: Record<string, string[]> = {
 
 export default async function middleware(req: NextRequest) {
     // 1. Ambil token dari cookie
-    const token = req.cookies.get(process.env.AUTH_COOKIE_NAME)?.value;
+    const authCookieName = process.env.AUTH_COOKIE_NAME ?? '';
+    const token = authCookieName ? req.cookies.get(authCookieName)?.value : undefined;
+
+   
     const path = req.nextUrl.pathname;
     const isProtectedRoute = protectedRoutes.includes(path);
     let userRole: string | undefined;
