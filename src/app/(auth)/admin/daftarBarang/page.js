@@ -89,7 +89,7 @@ export default function AdminBarang() {
     return (
        <div class="overflow-x-auto">
   
-        <Card title="List Daftar Barang" class="w-full sm:w-[500px] md:w-[700px] lg:w-[900px]" style="mt-5" showAddBtn onAddNew={onAddNew}>
+        <Card title="List Daftar Barang"  style="mt-5" showAddBtn onAddNew={onAddNew}>
         {/* <form
         onSubmit={handleSearchSubmit}
         className="flex items-center space-x-4 max-w-md mb-6"
@@ -108,7 +108,7 @@ export default function AdminBarang() {
           Submit
         </button>
       </form> */}
-            <table className="table-auto w-full">
+            <table className="table-auto w-full sm:w-[500px] md:w-[700px] lg:w-[900px]">
                 <thead>
                     <tr>
                         <th className='table-head border-blue-gray-100'>No</th>
