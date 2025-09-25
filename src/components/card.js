@@ -8,8 +8,8 @@ export default function Card({
 }) {
 
     return (
-        <div className={`min-w-max  px-4 my-2 ${style}`}>
-            <div className=" bg-white p-10  rounded-xl">
+        <div className={`w-full px-4 my-2 overflow-x-auto ${style}`}>
+            <div className="bg-white p-10 rounded-xl min-w-[300px]">
                 <div className="flex">
                     <h3 className="flex-1 text-2xl py-2">{title}</h3>
 
