@@ -37,9 +37,11 @@ export default function AdminMenu() {
     //   },
     // ];
     return (
+       <div className={`w-full overflow-x-auto`}>
+            <div className="bg-white rounded-xl min-w-[300px]">
         <header className="py-2 ">
-          <nav className="w-full overflow-x-auto">
-            <div className="min-w-[300px] max-w-5xl mx-auto px-6 md:px-12 xl:px-6 bg-white">
+          <nav className="w-full">
+            <div className="max-w-5xl mx-auto px-6 md:px-12 xl:px-6">
               <div className="flex flex-wrap items-center justify-between">
                 <div>
                   <a href="/admin">Admin Panel</a>
@@ -78,7 +80,7 @@ export default function AdminMenu() {
       Overlay (opsional) untuk menggelapkan background saat menu terbuka 
       {isOpen && <div className="menu-overlay" onClick={toggleMenu}></div>}  */}
     </div>
-                <div>
+                <div >
                   <ul className="flex flex-row gap-6">
                     <li className="mt-1">
                       <a className="btn-link" href="/admin/daftarBarang">Daftar Barang</a>
@@ -108,5 +110,7 @@ export default function AdminMenu() {
             </div>
           </nav>
         </header>
+        </div>
+        </div>
     )
 }
