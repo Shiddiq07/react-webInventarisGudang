@@ -93,15 +93,15 @@ export default function StaffDaftarBarang() {
       };
   console.log(searchTerm)
     return (
-        <>
+      <div class="overflow-x-auto">
         <Card title="List Daftar Barang" style="mt-5" >
         {/* <form
         onSubmit={handleSearchSubmit}
         className="flex items-center space-x-4 max-w-md mb-6"
-      >
+        >
         <input
-          type="text"
-          placeholder="Cari berdasarkan judul..."
+        type="text"
+        placeholder="Cari berdasarkan judul..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="flex-1 p-2 border border-gray-300 rounded-lg shadow focus:outline-none focus:ring focus:ring-indigo-300"
@@ -109,11 +109,12 @@ export default function StaffDaftarBarang() {
         <button
           type="submit"
           className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
-        >
+          >
           Submit
-        </button>
-      </form> */}
-            <table className="table-auto w-full">
+          </button>
+          </form> */}
+          <table className="w-full min-w-max">
+            
                 <thead>
                     <tr>
                         <th className='table-head border-blue-gray-100'>No</th>
@@ -167,6 +168,6 @@ export default function StaffDaftarBarang() {
         onOk={() => onConfirmOk()}
         isOkOnly={isOkOnly}
       />
-      </>
+      </div>
     );
 }

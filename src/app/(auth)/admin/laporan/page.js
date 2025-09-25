@@ -154,8 +154,8 @@ export default function AdminKategoriForm() {
                     </span>
                 </button> */}
                 <button className="btn-danger" onClick={sendDataToOtherPage}>
-                    <span className="relative text-sm font-semibold text-black">
-                        Send to Other Page
+                    <span className="relative bg-blue-600 text-sm font-semibold text-black">
+                        Buat Laporan
                     </span>
                 </button>
             </Card>
