@@ -97,7 +97,7 @@ let tujuanListBarang=`/staff/daftarBarang/${params.id}`;
                     <li className="mt-1">
                       <a className="btn-link" href={tujuanListBarang}>Daftar Barang</a>
                     </li>
-                    <li>
+                    <li className="mt-1">
                         <button  className="btn-primary" onClick={onLogOut}>
                             <span className="relative text-sm font-semibold text-white">
                                 Log Out

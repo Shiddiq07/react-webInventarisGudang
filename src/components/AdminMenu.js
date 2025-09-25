@@ -97,7 +97,7 @@ export default function AdminMenu() {
                     <li className="mt-1">
                       <a className="btn-link" href="/admin/laporan">laporan</a>
                     </li>
-                    <li>
+                    <li className="mt-1">
                         <button  className="btn-primary" onClick={onLogOut}>
                             <span className="relative text-sm font-semibold text-white">
                                 Log Out
