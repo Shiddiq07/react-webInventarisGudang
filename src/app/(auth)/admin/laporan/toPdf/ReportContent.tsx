@@ -389,9 +389,9 @@ body.push(subTotalRow);// Tambahkan sub total ke body tabel ini
         {/* --- Tampilkan Grand Total Masuk dan Keluar Keseluruhan --- */}
         {!loading && !error && Object.values(groupedProcessedTableData).some(group => group.items.length > 0) && (
             <div>
-                <p>Grand Total Barang Masuk Periode: <strong>{grandTotalMasuk.toLocaleString('id-ID')}</strong></p>
+                {/* <p>Grand Total Barang Masuk Periode: <strong>{grandTotalMasuk.toLocaleString('id-ID')}</strong></p>
                 <p>Grand Total Barang Keluar Periode: <strong>{grandTotalKeluar.toLocaleString('id-ID')}</strong></p>
-                <p>Grand Total Netto Periode: <strong>{(grandTotalMasuk - grandTotalKeluar).toLocaleString('id-ID')}</strong></p>
+                <p>Grand Total Netto Periode: <strong>{(grandTotalMasuk - grandTotalKeluar).toLocaleString('id-ID')}</strong></p> */}
             </div>
         )}
 

@@ -38,7 +38,7 @@ export default function AdminMenu() {
     // ];
     return (
        <div className={`w-full overflow-x-auto`}>
-            <div className="bg-white rounded-xl min-w-[300px]">
+            <div className="bg-white w-full rounded-xl min-w-[300px]">
         <header className="py-2 ">
           <nav className="w-full">
             <div className="max-w-5xl mx-auto px-6 md:px-12 xl:px-6">
