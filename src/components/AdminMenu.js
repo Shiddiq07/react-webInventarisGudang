@@ -37,9 +37,9 @@ export default function AdminMenu() {
     //   },
     // ];
     return (
-        <header className="py-2 bg-white">
-          <nav className="w-full">
-            <div className="max-w-5xl mx-auto px-6 md:px-12 xl:px-6">
+        <header className="py-2 ">
+          <nav className="w-full overflow-x-auto">
+            <div className="min-w-[300px] max-w-5xl mx-auto px-6 md:px-12 xl:px-6 bg-white">
               <div className="flex flex-wrap items-center justify-between">
                 <div>
                   <a href="/admin">Admin Panel</a>
