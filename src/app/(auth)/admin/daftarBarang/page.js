@@ -3,6 +3,7 @@ import Card from '../../../../components/card';
 import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ConfigDialog from '../../../../components/ConfirmDialog';
+import "./../../../(auth)/global.css"
 
 export default function AdminBarang() {
   const router = useRouter();
@@ -86,7 +87,8 @@ export default function AdminBarang() {
     }
 
     return (
-        <>
+       <div class="overflow-x-auto">
+  <div class="w-full sm:w-[500px] md:w-[700px] lg:w-[900px]">
         <Card title="List Daftar Barang" style="mt-5" showAddBtn onAddNew={onAddNew}>
         {/* <form
         onSubmit={handleSearchSubmit}
@@ -161,6 +163,7 @@ export default function AdminBarang() {
         onOk={() => onConfirmOk()}
         isOkOnly={isOkOnly}
       />
-      </>
+     </div>
+        </div>
     );
 }
