@@ -88,8 +88,8 @@ export default function AdminBarang() {
 
     return (
        <div class="overflow-x-auto">
-  <div class="w-full sm:w-[500px] md:w-[700px] lg:w-[900px]">
-        <Card title="List Daftar Barang" style="mt-5" showAddBtn onAddNew={onAddNew}>
+  
+        <Card title="List Daftar Barang" class="w-full sm:w-[500px] md:w-[700px] lg:w-[900px]" style="mt-5" showAddBtn onAddNew={onAddNew}>
         {/* <form
         onSubmit={handleSearchSubmit}
         className="flex items-center space-x-4 max-w-md mb-6"
@@ -164,6 +164,6 @@ export default function AdminBarang() {
         isOkOnly={isOkOnly}
       />
      </div>
-        </div>
+        
     );
 }
