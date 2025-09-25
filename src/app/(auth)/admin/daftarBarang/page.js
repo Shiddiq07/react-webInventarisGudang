@@ -108,7 +108,7 @@ export default function AdminBarang() {
           Submit
         </button>
       </form> */}
-            <table className="table-auto w-full sm:w-[500px] md:w-[700px] lg:w-[900px]">
+            <table className="w-full min-w-max">
                 <thead>
                     <tr>
                         <th className='table-head border-blue-gray-100'>No</th>
