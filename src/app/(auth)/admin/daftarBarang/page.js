@@ -132,6 +132,7 @@ console.log(data.data)
                         return (
                             <tr key={key} className='border-b border-blue-gray-50 '>
                                 <td className='p-2 text-center'>{key+1}</td>
+                                <td className='p-2 text-center'>{item.namaBarang} </td>
                                 <td className='p-2 text-center'>{item.namaKategori} </td>
                                 <td className='p-2 text-center'>{item.stok} </td>
                                 <td className='p-2 text-center'>{item.satuan} </td>
