@@ -370,8 +370,9 @@ body.push(subTotalRow);// Tambahkan sub total ke body tabel ini
   // --- Render tampilan HTML ---
   return (
     <div>
-      <h2>Laporan Stock Opname ATK & RTK</h2>
-
+    <div className='flex justify-between'>
+<div>
+    
        {tahun && (
            <p>Laporan untuk Periode:
            {' '}
@@ -384,6 +385,15 @@ body.push(subTotalRow);// Tambahkan sub total ke body tabel ini
            }
            </p>
        )}
+</div>
+<div>
+ <button className='btn-primary mt-6' onClick={handleDownloadPDF} disabled={loading || !Object.values(groupedProcessedTableData).some(group => group.items.length > 0)}>
+      <span className='relative text-sm font-semibold text-white'> 
+         {loading ? 'Memuat Data...' : (Object.values(groupedProcessedTableData).some(group => group.items.length > 0) ? 'Download PDF' : 'Tidak ada Data untuk PDF')}
+        </span>
+      </button>
+</div>
+</div>
        {!tahun && <p>Harap masukkan parameter tahun di URL (contoh: ?tahun=2025&bulan=05 atau ?tahun=2025&bulan=all)</p>}
 
         {/* --- Tampilkan Grand Total Masuk dan Keluar Keseluruhan --- */}
@@ -395,9 +405,7 @@ body.push(subTotalRow);// Tambahkan sub total ke body tabel ini
             </div>
         )}
 
-      <button onClick={handleDownloadPDF} disabled={loading || !Object.values(groupedProcessedTableData).some(group => group.items.length > 0)}>
-        {loading ? 'Memuat Data...' : (Object.values(groupedProcessedTableData).some(group => group.items.length > 0) ? 'Download PDF' : 'Tidak ada Data untuk PDF')}
-      </button>
+     
 
       {loading && <p>Memuat data laporan...</p>}
       {error && <p>Error memuat data: {error.message}</p>}
@@ -414,6 +422,7 @@ body.push(subTotalRow);// Tambahkan sub total ke body tabel ini
                 // Hanya render tabel jika ada data untuk kategori ini
                 if (categoryData && categoryData.items.length > 0) {
                     return (
+                        
                         <div key={categoryName} style={{ marginBottom: '40px' }}>
                             <h3 style={{ marginTop: '30px', marginBottom: '10px' }}>Kategori: {categoryName}</h3>
                             <table style={{ width: '100%', borderCollapse: 'collapse' }}>

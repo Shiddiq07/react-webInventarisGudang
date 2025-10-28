@@ -23,7 +23,10 @@ body {
 .bodyLogin {
 
   @apply bg-blue-600;
-  @apply w-3/6;
+  @apply w-auto;
+  @apply h-[470px];
+  @apply min-w-[500px];
+  @apply min-h-[470px];
   @apply rounded-2xl;
 }
 :root {

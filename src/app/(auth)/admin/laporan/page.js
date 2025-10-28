@@ -153,8 +153,8 @@ export default function AdminKategoriForm() {
                         Save Data
                     </span>
                 </button> */}
-                <button className="btn-danger" onClick={sendDataToOtherPage}>
-                    <span className="relative bg-blue-600 text-sm font-semibold text-black">
+                <button className="btn-primary mt-10" onClick={sendDataToOtherPage}>
+                    <span className="relative text-sm font-semibold text-white">
                         Buat Laporan
                     </span>
                 </button>

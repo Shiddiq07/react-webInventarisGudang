@@ -48,21 +48,21 @@ export default function Login(){
 
     return (
         <>
-        <div className=" flex justify-center mt-16">
+        <div className="container-fluid flex justify-center mt-12 ">
         <div className="bodyLogin">
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 ">
+        <div className="flex min-h-full flex-1 flex-col justify-center px-4 py-12 lg:px-8 ">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <img
                     alt="LP3I Jakarta Logo"
                     src="https://www.lp3i.ac.id/wp-content/uploads/2022/06/logo.svg"
-                    className="mx-auto h-15 w-20"
+                    className="mx-auto h-13 w-18"
                 />
-            <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+            <h3 className="mt-5 text-center text-xl font-bold leading-9 tracking-tight text-gray-900">
                 Login to your account
-            </h2>
+            </h3>
             </div>
 
-            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <div className="p-5 sm:mx-auto sm:w-full sm:max-w-sm">
             <form action="" method="POST" className="space-y-6">
                 <div>
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
