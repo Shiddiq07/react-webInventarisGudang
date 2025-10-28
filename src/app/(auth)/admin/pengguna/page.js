@@ -3,6 +3,8 @@ import Card from '../../../../components/card';
 import { useRouter} from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ConfigDialog from '../../../../components/ConfirmDialog';
+import SearchBar from "../../../../components/SearchBar"
+import{useFilter} from '../../../../customHooks/useFilter';
 
 export default function AdminPengguna() {
   const router = useRouter();
@@ -13,6 +15,7 @@ export default function AdminPengguna() {
   const [isOkOnly, setIsOkOnly] = useState(true);
   const [deleteId, setDeleteId] = useState(null);
   const [data,setData]=useState([])
+     const {searchTerm,filteredData,handleSearchChange}=useFilter(data,['nama','email'])
 
  
 
@@ -63,7 +66,7 @@ export default function AdminPengguna() {
      
           setData(data.data);
           setLoading(false);
-
+console.log(data.data)
         } catch (err) {
             console.log("err", err);
             setData([]);
@@ -81,6 +84,10 @@ export default function AdminPengguna() {
 
     return (
         <>
+           <SearchBar 
+                    onSearchChange={handleSearchChange}
+                    searchTerm={searchTerm}
+        />
         <Card title="List of pengguna" style="mt-5" showAddBtn onAddNew={onAddNew}>
             <table className="table-auto w-full">
                 <thead>
@@ -94,7 +101,7 @@ export default function AdminPengguna() {
                 </thead>
                 <tbody>
                   
-                    {data.map((item, key) => {
+                    {filteredData.map((item, key) => {
                         if (isLoading) {
                             return (
                                 <tr key={key} className='border-b border-blue-gray-50 '>
@@ -108,10 +115,10 @@ export default function AdminPengguna() {
                         return (
                             <tr key={key} className='border-b border-blue-gray-50 '>
                                 <td className='p-2 text-center'>{key+1}</td>
-                                <td className='p-2 '>{item.nama} </td>
-                                <td className='p-2 '>{item.email} </td>
-                                <td className='p-2 '>{item.role} </td>
-                                <td className='p-2 '>
+                                <td className='p-2 text-center'>{item.nama} </td>
+                                <td className='p-2 text-center'>{item.email} </td>
+                                <td className='p-2 text-center'>{item.role} </td>
+                                <td className='p-2 text-center'>
                                     <div className="inline-flex text-[12px]">
                                         {/* <button
                                         onClick={()=>goToDetail(item._id)}

@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         case "POST":
             try {
-                const body = JSON.parse(req.body);
+                const body = req.body;
                 const validasi = await db.collection('barang').findOne({ namaBarang: body.namaBarang }); 
 
                  if (typeof body !== "object") {

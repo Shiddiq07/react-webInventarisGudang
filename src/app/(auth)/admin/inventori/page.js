@@ -3,7 +3,8 @@ import Card from '../../../../components/card';
 import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ConfigDialog from '../../../../components/ConfirmDialog';
-
+import SearchBar from "../../../../components/SearchBar"
+import{useFilter} from '../../../../customHooks/useFilter';
 export default function AdminBarang() {
   const router = useRouter();
   const [isLoading, setLoading] = useState(true);
@@ -13,10 +14,9 @@ export default function AdminBarang() {
   const [barang, setKategori] = useState([]); // Stores all barang
   const [isOkOnly, setIsOkOnly] = useState(true);
   const [deleteId, setDeleteId] = useState(null);
-  const [searchTerm,setSearchTerm]=useState('')
   const [data,setData]=useState([])
-  const [filteredData,setFilteredData]=useState([])
 
+     const {searchTerm,filteredData,handleSearchChange}=useFilter(data,['kodeBarang','namaKategori'])
  
 
     const onAddNew = ()=>{
@@ -64,7 +64,6 @@ export default function AdminBarang() {
             let res = await fetch("/api/inventaris");
           let data = await res.json();
           setData(data.data);
-          setFilteredData(data.data);
           setLoading(false);
 
         } catch (err) {
@@ -79,9 +78,13 @@ export default function AdminBarang() {
       }, []); // Re-run fetchData on searchTerm change
     
     
-   
+    
     return (
         <>
+         <SearchBar 
+                    onSearchChange={handleSearchChange}
+                    searchTerm={searchTerm}
+        />
         <Card title="List Inventaris Masuk/Keluar" style="mt-5" showAddBtn onAddNew={onAddNew}>
             <table className="table-auto w-full">
                 <thead>
@@ -102,13 +105,13 @@ export default function AdminBarang() {
                         return (
                             <tr key={key} className='border-b border-blue-gray-50 '>
                                 <td className='p-2 text-center'>{key+1}</td>
-                                <td className='p-2 '>{item.kodeBarang} </td>
+                                <td className='p-2 text-center'>{item.kodeBarang} </td>
                                 <td className='p-2 text-center'>{item.created_by}</td>
-                                <td className='p-2 '>{item.jumlah} </td>
-                                <td className='p-2 '>{item.namaKategori} </td>
-                                <td className='p-2 '>{item.keterangan} </td>
-                                <td className='p-2 '>{item.date} </td>
-                                 <td className='p-2 '>
+                                <td className='p-2 text-center'>{item.jumlah} </td>
+                                <td className='p-2 text-center'>{item.namaKategori} </td>
+                                <td className='p-2 text-center'>{item.keterangan} </td>
+                                <td className='p-2 text-center'>{item.date} </td>
+                                 <td className='p-2 text-center'>
                                     <div className="inline-flex text-[12px]">
                                      
                                         <button 

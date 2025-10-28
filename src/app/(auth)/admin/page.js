@@ -7,7 +7,7 @@ export default function Dashboard() {
     console.log(role);
     return (
       <>
-        asdf
+        Have A Nice Day!
       </>
     );
 }

@@ -4,20 +4,23 @@ import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ConfigDialog from '../../../../components/ConfirmDialog';
 import "./../../../(auth)/global.css"
+import SearchBar from "../../../../components/SearchBar"
+import{useFilter} from '../../../../customHooks/useFilter';
 
 export default function AdminBarang() {
-  const router = useRouter();
-  const [isLoading, setLoading] = useState(true);
-  const [modal, setModal] = useState(false);
-  const [modalTitle, setModalTitle] = useState("");
-  const [modalMessage, setModalMessage] = useState("");
-  const [barang, setKategori] = useState([]); // Stores all barang
-  const [isOkOnly, setIsOkOnly] = useState(true);
-  const [deleteId, setDeleteId] = useState(null);
-  const [kodeBarang, setKodeBarang] = useState(null);
-  const [searchTerm,setSearchTerm]=useState('')
-  const [data,setData]=useState([])
-  const [filteredData,setFilteredData]=useState([])
+    
+    const router = useRouter();
+    const [isLoading, setLoading] = useState(true);
+    const [modal, setModal] = useState(false);
+    const [modalTitle, setModalTitle] = useState("");
+    const [modalMessage, setModalMessage] = useState("");
+    const [barang, setKategori] = useState([]); // Stores all barang
+    const [isOkOnly, setIsOkOnly] = useState(true);
+    const [deleteId, setDeleteId] = useState(null);
+    const [kodeBarang, setKodeBarang] = useState(null);
+    const [data,setData]=useState([])
+  
+    const {searchTerm,filteredData,handleSearchChange}=useFilter(data,['namaBarang','kodeBarang','namaKategori'])
 
  
 
@@ -68,9 +71,9 @@ export default function AdminBarang() {
             let res = await fetch("/api/daftarBarang");
           let data = await res.json();
           setData(data.data);//menerima objek data dari api dan memasukkannya ke dalam state data
-          setFilteredData(data.data);
+         
           setLoading(false);
-
+console.log(data.data)
         } catch (err) {
             console.log("err", err);
             setData([]);
@@ -87,8 +90,11 @@ export default function AdminBarang() {
     }
 
     return (
-       <div class="overflow-x-auto">
-  
+       <div className="overflow-x-auto">
+    <SearchBar 
+            onSearchChange={handleSearchChange}
+            searchTerm={searchTerm}
+/>
         <Card title="List Daftar Barang"  style="mt-5" showAddBtn onAddNew={onAddNew}>
         {/* <form
         onSubmit={handleSearchSubmit}
@@ -112,8 +118,8 @@ export default function AdminBarang() {
                 <thead>
                     <tr>
                         <th className='table-head border-blue-gray-100'>No</th>
-                        <th className='table-head border-blue-gray-100'>Kategori</th>
                         <th className='table-head border-blue-gray-100'>Nama</th>
+                        <th className='table-head border-blue-gray-100'>Kategori</th>
                         <th className='table-head border-blue-gray-100'>Stok</th>
                         <th className='table-head border-blue-gray-100'>Satuan</th>
                         <th className='table-head border-blue-gray-100'>Kode Barang</th>
@@ -126,13 +132,12 @@ export default function AdminBarang() {
                         return (
                             <tr key={key} className='border-b border-blue-gray-50 '>
                                 <td className='p-2 text-center'>{key+1}</td>
-                                <td className='p-2 '>{item.namaKategori} </td>
-                                <td className='p-2 '>{item.namaBarang} </td>
-                                <td className='p-2 '>{item.stok} </td>
-                                <td className='p-2 '>{item.satuan} </td>
-                                <td className='p-2 '>{item.kodeBarang} </td>
+                                <td className='p-2 text-center'>{item.namaKategori} </td>
+                                <td className='p-2 text-center'>{item.stok} </td>
+                                <td className='p-2 text-center'>{item.satuan} </td>
+                                <td className='p-2 text-center'>{item.kodeBarang} </td>
 
-                                 <td className='p-2 '>
+                                 <td className='p-2 text-center'>
                                     <div className="inline-flex text-[12px]">
                                         <button 
                                             onClick={()=>gotoEditPage(item._id)}
