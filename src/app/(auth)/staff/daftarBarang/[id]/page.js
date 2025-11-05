@@ -1,5 +1,5 @@
 'use client'
-import Card from '../../../../../components/card';
+import PaginatedTable from '../../../../../components/PaginatedTable';
 import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ConfigDialog from '../../../../../components/ConfirmDialog';
@@ -66,7 +66,14 @@ export default function StaffDaftarBarang() {
       }, []); // Re-run fetchData on searchTerm change
     
     
+  const ITEM_COLUMNS = [
+        { header: 'Nama', field: 'namaBarang' },
+        { header: 'Kategori', field: 'namaKategori' },
+        { header: 'Stok', field: 'stok' },
 
+        { header: 'Satuan', field: 'satuan' },
+        { header: 'Kode Barang', field: 'kodeBarang' }
+  ];
     return (
 
       <div class="overflow-x-auto">
@@ -74,40 +81,8 @@ export default function StaffDaftarBarang() {
                       onSearchChange={handleSearchChange}
                       searchTerm={searchTerm}
           />
-        <Card title="List Daftar Barang" style="mt-5" >
-      
-          <table className="w-full min-w-max">
-            
-                <thead>
-                    <tr>
-                        <th className='table-head border-blue-gray-100'>No</th>
-                        <th className='table-head border-blue-gray-100'>Kategori</th>
-                        <th className='table-head border-blue-gray-100'>Nama</th>
-                        <th className='table-head border-blue-gray-100'>Stok</th>
-                        <th className='table-head border-blue-gray-100'>Satuan</th>
-                        <th className='table-head border-blue-gray-100'>Kode Barang</th>
-                    </tr>
-                </thead>
-                <tbody>
-                  
-                {!isLoading && filteredData.map((item, key)=>{
-                        return (
-                            <tr key={key} className='border-b border-blue-gray-50 '>
-                                <td className='p-2 text-center'>{key+1}</td>
-                                <td className='p-2 text-center'>{item.namaKategori} </td>
-                                <td className='p-2 text-center'>{item.namaBarang} </td>
-                                <td className='p-2 text-center'>{item.stok} </td>
-                                <td className='p-2 text-center'>{item.satuan} </td>
-                                <td className='p-2 text-center'>{item.kodeBarang} </td>
-                               
-                            </tr>
-                        )
-                    })
-                    }
-                </tbody>
-            </table>
-        </Card>
-
+        <PaginatedTable data={filteredData} columns={ITEM_COLUMNS} itemsPerPage={10} title="List Daftar Barang" />
+        
         <ConfigDialog
         onOkOny={() => onCancel()}
         showDialog={modal}

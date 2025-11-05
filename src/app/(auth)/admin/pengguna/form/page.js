@@ -1,9 +1,13 @@
 "use client"
 import { useState } from 'react'
+import { useRouter } from 'next/navigation';
+
 import "../../global.css";
 import Card from '../../../../../components/card';
 import ConfigDialog from '../../../../../components/ConfirmDialog'
 export default function AdminFormPengguna(){
+            const router= useRouter()
+
         const [modal, setModal] = useState(false)
     const [modalTitle, setModalTitle] = useState("")
     const [modalMessage, setModalMessage] = useState("")
@@ -28,25 +32,56 @@ export default function AdminFormPengguna(){
            
         })
     }
+      const onCancel=()=>{
+        setModal(false)
+        setModalTitle('')
+        setModalMessage('')
+        clearData()
+    }
+  const validasi=()=>{
+  // 5. Perbaiki akses nilai dari state 'data'
+        if (!data.nama || !data.email|| !data.role || !data.password) {
+            setModal(true);
+            setIsOkOnly(true); // Ini adalah info/error, jadi OK Only
+            setModalTitle('Validasi Input');
+            setModalMessage('Harap lengkapi semua bidang: Nama, Email,Role, dan Password.');
+            return; // Hentikan proses jika ada input yang kosong
+        }
+
+        setModal(true)
+        setIsOkOnly(false) // Ini adalah konfirmasi, jadi bukan OK Only (ada Cancel)
+
+        setModalTitle('Konfirmasi Penyimpanan')
+        setModalMessage(`Apakah Anda yakin ingin menyimpan data pengguna?`)
+    }
+
+  const onConfirmOk = () => {
+onSubmitData()
+
+         setModal(false) // Modal ditutup setelah konfirmasi (dan onSubmitData dipanggil)
+  }
+
    async function onSubmitData() {
         try{
             
                 const body = data
                
-                let res = await fetch('/api/inventaris', {
+                let res = await fetch('/api/pengguna', {
                     method:'POST',
                     body: JSON.stringify(body),
                 })
 
                 
                 let resData = await res.json()
-                if(!resData.data){
+               if (!res.ok) { // Cek res.ok untuk status HTTP >= 200 dan < 300
                 throw Error(resData.message)
                 }
+                                         setIsOkOnly(true)
+
                 setModal(true)
                 setModalTitle('Info')
                 setModalMessage(resData.message)
-                
+                clearData()
                     // if (res.userRole === 'ga') {
                     //     router.push('/admin/daftarBarang');
                     // } else if (userRole === 'staff') {
@@ -76,6 +111,7 @@ export default function AdminFormPengguna(){
         setData({...data, [e.target.name]: e.target.value })
       }
 
+      
     return (
         <>
          <div className=" flex justify-center ">
@@ -160,7 +196,7 @@ export default function AdminFormPengguna(){
                         <div>
                             <button
                                 type="button"
-                                onClick={onSubmitData}
+                                onClick={validasi}
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
                                 Save

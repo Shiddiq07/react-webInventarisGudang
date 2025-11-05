@@ -1,6 +1,7 @@
 'use client'
-import Card from '../../../../components/card';
-import { useRouter, useParams } from 'next/navigation';
+import PaginatedTable from '../../../../components/PaginatedTable';
+
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ConfigDialog from '../../../../components/ConfirmDialog';
 import SearchBar from "../../../../components/SearchBar"
@@ -10,8 +11,8 @@ export default function AdminBarang() {
   const [isLoading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
+  const [kodeBarang, setKodeBarang] = useState("");
   const [modalMessage, setModalMessage] = useState("");
-  const [barang, setKategori] = useState([]); // Stores all barang
   const [isOkOnly, setIsOkOnly] = useState(true);
   const [deleteId, setDeleteId] = useState(null);
   const [data,setData]=useState([])
@@ -23,8 +24,11 @@ export default function AdminBarang() {
         router.push('/admin/inventori/form')
     }
 
-    const onConfirmDelete=(id)=>{
-        setDeleteId(id)
+    const onConfirmDelete=(item)=>{
+      const itemId = item._id; // <-- The ID is extracted here
+  
+
+        setDeleteId(itemId)
         setIsOkOnly(false)
         setModalTitle('Confirm')
         setModalMessage('Apakah and yakin ingin menghapus data ini?')
@@ -78,6 +82,29 @@ export default function AdminBarang() {
       }, []); // Re-run fetchData on searchTerm change
     
     
+    const ITEM_COLUMNS = [
+        { header: 'Kode Barang', field: 'kodeBarang' },
+        { header: 'Pengguna', field: 'created_by' },
+        { header: 'Jumlah', field: 'jumlah' },
+        { header: 'Kategori', field: 'namaKategori' },
+
+        { header: 'keterangan', field: 'keterangan' },
+        { header: 'date', field: 'date' },
+      { 
+        header: 'Action', 
+        field: 'actions', 
+        render: (item) => (
+            <div className="inline-flex text-[12px]">
+              <button 
+                                            onClick={()=>onConfirmDelete(item)}
+                                            className="bg-red-300 hover:bg-red-400 text-gray-800 py-2 px-4 rounded-r">
+                                            Batalkan
+                                        </button>
+            </div>
+        )
+    }
+
+];
     
     return (
         <>
@@ -85,49 +112,8 @@ export default function AdminBarang() {
                     onSearchChange={handleSearchChange}
                     searchTerm={searchTerm}
         />
-        <Card title="List Inventaris Masuk/Keluar" style="mt-5" showAddBtn onAddNew={onAddNew}>
-            <table className="table-auto w-full">
-                <thead>
-                    <tr>
-                        <th className='table-head border-blue-gray-100'>No</th>
-                        <th className='table-head border-blue-gray-100'>Kode Barang</th>
-                        <th className='table-head border-blue-gray-100'>Nama</th>
-                        <th className='table-head border-blue-gray-100'>Jumlah</th>
-                        <th className='table-head border-blue-gray-100'>Kategori</th>
-                        <th className='table-head border-blue-gray-100'>Keterangan</th>
-                        <th className='table-head border-blue-gray-100'>Date</th>
-                        <th className='table-head border-blue-gray-100'>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                  
-                {!isLoading && filteredData.map((item, key)=>{
-                        return (
-                            <tr key={key} className='border-b border-blue-gray-50 '>
-                                <td className='p-2 text-center'>{key+1}</td>
-                                <td className='p-2 text-center'>{item.kodeBarang} </td>
-                                <td className='p-2 text-center'>{item.created_by}</td>
-                                <td className='p-2 text-center'>{item.jumlah} </td>
-                                <td className='p-2 text-center'>{item.namaKategori} </td>
-                                <td className='p-2 text-center'>{item.keterangan} </td>
-                                <td className='p-2 text-center'>{item.date} </td>
-                                 <td className='p-2 text-center'>
-                                    <div className="inline-flex text-[12px]">
-                                     
-                                        <button 
-                                            onClick={()=>onConfirmDelete(item._id)}
-                                            className="bg-red-300 hover:bg-red-400 text-gray-800 py-2 px-4 rounded-r">
-                                            Batalkan
-                                        </button>
-                                    </div>
-                                </td> 
-                            </tr>
-                        )
-                    })
-                    }
-                </tbody>
-            </table>
-        </Card>
+       <PaginatedTable data={filteredData} columns={ITEM_COLUMNS} itemsPerPage={10} title="List Inventaris Keluar/Masuk" showAddBtn onAddNew={onAddNew} />
+       
 
         <ConfigDialog
         onOkOny={() => onCancel()}

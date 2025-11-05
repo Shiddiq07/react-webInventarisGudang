@@ -116,16 +116,7 @@ export default function AdminKategoriForm() {
     return (
         <>
             <Card title="Form Buat Laporan">
-                <div className="w-full my-2">
-                    <label htmlFor="date">Tanggal Pembuatan Laporan:</label>
-                    <input
-                        type="date"
-                        id="date"
-                        value={selectedDate}
-                        onChange={inputHandler}
-                        className="w-full border my-input-text"
-                    />
-                </div>
+               
 
                 <div className="w-full my-2">
                     <label htmlFor="month">Masukkan Bulan Data Yang Ingin diakses:</label>
@@ -148,11 +139,7 @@ export default function AdminKategoriForm() {
                         className="w-full border my-input-text"
                     />
                 </div>
-                {/* <button className="btn-primary mr-2" onClick={onSubmitData}>
-                    <span className="relative text-sm font-semibold text-white">
-                        Save Data
-                    </span>
-                </button> */}
+              
                 <button className="btn-primary mt-10" onClick={sendDataToOtherPage}>
                     <span className="relative text-sm font-semibold text-white">
                         Buat Laporan

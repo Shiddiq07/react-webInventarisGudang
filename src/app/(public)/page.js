@@ -57,15 +57,16 @@ export default function Login(){
                     src="https://www.lp3i.ac.id/wp-content/uploads/2022/06/logo.svg"
                     className="mx-auto h-13 w-18"
                 />
-            <h3 className="mt-5 text-center text-xl font-bold leading-9 tracking-tight text-gray-900">
-                Login to your account
+            <h3 className="mt-2 text-white text-center text-xl font-bold leading-9 tracking-tight text-gray-900">
+                General Affair
             </h3>
+           
             </div>
 
             <div className="p-5 sm:mx-auto sm:w-full sm:max-w-sm">
             <form action="" method="POST" className="space-y-6">
                 <div>
-                <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-200">
                     Email address
                 </label>
                 <div className="mt-2">
@@ -83,7 +84,7 @@ export default function Login(){
 
                 <div>
                 <div className="flex items-center justify-between">
-                    <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+                    <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-200">
                     Password
                     </label>
                     {/* <div className="text-sm">

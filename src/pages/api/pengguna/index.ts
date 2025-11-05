@@ -11,7 +11,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         case "POST":
             try{
                 const body = JSON.parse(req.body)
-                const hashPwd= await hashPassword(body.confirm_password)
+                const hashPwd= await hashPassword(body.password)
                 const userData = {
                     nama: body.nama,
                     email:body.email,
@@ -23,7 +23,7 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
                 }
 
                 let user = await db.collection("pengguna").insertOne(userData);
-                res.json({ data: user });
+                res.json({ data: user,message: 'data berhasil di simpan'  });
 
             } catch(err){
                 res.status(422).json({ message: err.message});

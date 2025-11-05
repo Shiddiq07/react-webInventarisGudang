@@ -33,13 +33,22 @@ export default function Register(){
 
     return (
         <>
-            <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-                <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                    <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                        Register new account
-                    </h2>
-                </div>
-                <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+           <div className="container-fluid flex justify-center mt-12 ">
+        
+        <div className="flex min-h-full flex-1 flex-col justify-center px-4 py-12 lg:px-8 ">
+            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+                <img
+                    alt="LP3I Jakarta Logo"
+                    src="https://www.lp3i.ac.id/wp-content/uploads/2022/06/logo.svg"
+                    className="mx-auto h-13 w-18"
+                />
+            <h3 className="mt-2 text-white text-center text-xl font-bold leading-9 tracking-tight text-gray-900">
+                General Affair
+            </h3>
+           
+            </div>
+
+            <div className="p-5 sm:mx-auto sm:w-full sm:max-w-sm">
                     <form action="" method="POST" className="space-y-6">
                         <div>
                             <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
@@ -124,6 +133,7 @@ export default function Register(){
                         </a>
                     </p>
                 </div>
+            </div>
             </div>
         </>
     )

@@ -1,5 +1,4 @@
 'use client'
-import { create } from 'domain';
 import Card from '../../../../components/card';
 import ConfigDialog from '../../../../components/ConfirmDialog'
 import { useState ,useRef} from 'react'
@@ -70,14 +69,7 @@ export default function StaffPermintaanForm() {
                 setModal(true)
                 setModalTitle('Info')
                 setModalMessage(resData.message)
-                
-                    // if (res.userRole === 'ga') {
-                    //     router.push('/admin/daftarBarang');
-                    // } else if (userRole === 'staff') {
-                    //     router.push('/supplier');
-                    // } else {
-                    //     router.push('/'); // Atau halaman default lainnya
-                    // }
+            
         
                 
         

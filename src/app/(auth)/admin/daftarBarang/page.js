@@ -1,9 +1,11 @@
 'use client'
-import Card from '../../../../components/card';
-import { useRouter, useParams } from 'next/navigation';
+import PaginatedTable from '../../../../components/PaginatedTable';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ConfigDialog from '../../../../components/ConfirmDialog';
 import "./../../../(auth)/global.css"
+
+
 import SearchBar from "../../../../components/SearchBar"
 import{useFilter} from '../../../../customHooks/useFilter';
 
@@ -14,7 +16,6 @@ export default function AdminBarang() {
     const [modal, setModal] = useState(false);
     const [modalTitle, setModalTitle] = useState("");
     const [modalMessage, setModalMessage] = useState("");
-    const [barang, setKategori] = useState([]); // Stores all barang
     const [isOkOnly, setIsOkOnly] = useState(true);
     const [deleteId, setDeleteId] = useState(null);
     const [kodeBarang, setKodeBarang] = useState(null);
@@ -28,9 +29,12 @@ export default function AdminBarang() {
         router.push('/admin/daftarBarang/form')
     }
 
-    const onConfirmDelete=(id,kodeBarang)=>{
-        setDeleteId(id)
-        setKodeBarang(kodeBarang)
+    const onConfirmDelete=(item)=>{
+const itemId = item._id; // <-- The ID is extracted here
+    const itemKode = item.kodeBarang;
+
+        setDeleteId(itemId)
+        setKodeBarang(itemKode)
         setIsOkOnly(false)
         setModalTitle('Confirm')
         setModalMessage('Apakah and yakin ingin menghapus data ini?')
@@ -85,35 +89,50 @@ console.log(data.data)
         fetchData();
       }, []); // Re-run fetchData on searchTerm change
     
-    const gotoEditPage=(id)=>{
-        router.push(`/admin/daftarBarang/edit/${id}`)
+    const gotoEditPage=(item)=>{
+
+        router.push(`/admin/daftarBarang/edit/${item._id}`)
     }
 
+
+
+    const ITEM_COLUMNS = [
+        { header: 'Nama', field: 'namaBarang' },
+        { header: 'Kategori', field: 'namaKategori' },
+        { header: 'Stok', field: 'stok' },
+
+        { header: 'Satuan', field: 'satuan' },
+        { header: 'Kode Barang', field: 'kodeBarang' },
+      { 
+        header: 'Action', 
+        field: 'actions', // Use a unique field name like 'actions'
+        // Define the render function (or component) for this column:
+        render: (item) => (
+            <div className="inline-flex text-[12px]">
+              <button 
+                                            onClick={()=>gotoEditPage(item)}
+                                            className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4">
+                                            Edit
+                                        </button>
+                                        <button 
+                                            onClick={()=>onConfirmDelete(item)}
+                                            className="bg-red-300 hover:bg-red-400 text-gray-800 py-2 px-4 rounded-r">
+                                            Delete
+                                        </button>
+            </div>
+        )
+    }
+   
+];
     return (
        <div className="overflow-x-auto">
     <SearchBar 
             onSearchChange={handleSearchChange}
             searchTerm={searchTerm}
 />
-        <Card title="List Daftar Barang"  style="mt-5" showAddBtn onAddNew={onAddNew}>
-        {/* <form
-        onSubmit={handleSearchSubmit}
-        className="flex items-center space-x-4 max-w-md mb-6"
-      >
-        <input
-          type="text"
-          placeholder="Cari berdasarkan judul..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="flex-1 p-2 border border-gray-300 rounded-lg shadow focus:outline-none focus:ring focus:ring-indigo-300"
-        />
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
-        >
-          Submit
-        </button>
-      </form> */}
+<PaginatedTable  data={filteredData} columns={ITEM_COLUMNS} itemsPerPage={10} title="List Daftar Barang" showAddBtn onAddNew={onAddNew} />
+        {/* <Card title="List Daftar Barang"  style="mt-5" showAddBtn onAddNew={onAddNew}>
+      
             <table className="w-full min-w-max">
                 <thead>
                     <tr>
@@ -158,7 +177,7 @@ console.log(data.data)
                     }
                 </tbody>
             </table>
-        </Card>
+        </Card> */}
 
         <ConfigDialog
         onOkOny={() => onCancel()}

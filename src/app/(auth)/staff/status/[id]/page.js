@@ -1,5 +1,5 @@
 'use client';
-import Card from '../../../../../components/card';
+import PaginatedTable from '../../../../../components/PaginatedTable';
 import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ConfigDialog from '../../../../../components/ConfirmDialog';
@@ -18,10 +18,12 @@ export default function StaffStatusPermintaan() {
   const [deleteId, setDeleteId] = useState(null);
   const [data, setData] = useState([]);
 
-        const {searchTerm,filteredData,handleSearchChange}=useFilter(data,['namaPemohon','kodeBarang'])
+        const {searchTerm,filteredData,handleSearchChange}=useFilter(data,['namaPemohon','kodeBarang','status'])
 
-  const onConfirmDelete = (id) => {
-    setDeleteId(id);
+  const onConfirmDelete = (item) => {
+   const itemId = item._id;
+               setDeleteId(itemId)
+
     setIsOkOnly(false);
     setModalTitle('Confirm');
     setModalMessage('Apakah and yakin ingin menghapus data ini?');
@@ -74,59 +76,57 @@ export default function StaffStatusPermintaan() {
 
   
 
-  return (
-    <>
-      
-     <SearchBar 
-                      onSearchChange={handleSearchChange}
-                      searchTerm={searchTerm}
-          />
-      <Card title="List Status Permintaan Barang" style="mt-5">
-      
-        <table className="table-auto w-full">
-          <thead>
-            <tr>
-              <th className='table-head border-blue-gray-100'>No</th>
-              <th className='table-head border-blue-gray-100'>Kode Barang</th>
-              <th className='table-head border-blue-gray-100'>Nama</th>
-              <th className='table-head border-blue-gray-100'>Jumlah</th>
-              <th className='table-head border-blue-gray-100'>Keterangan</th>
-              <th className='table-head border-blue-gray-100'>Date</th>
-              <th className='table-head border-blue-gray-100'>Status</th>
-              <th className='table-head border-blue-gray-100'>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {!isLoading && filteredData.map((item, key) => (
-              <tr key={key} className='border-b border-blue-gray-50 '>
-                <td className='p-2 text-center'>{key + 1}</td>
-                <td className='p-2 text-center'>{item.kodeBarang} </td>
-                <td className='p-2 text-center'>{item.namaPemohon}</td>
-                <td className='p-2 text-center'>{item.jumlah} </td>
-                <td className='p-2 text-center'>{item.keterangan} </td>
-                <td className='p-2 text-center'>{item.date} </td>
-                <td className='p-2 text-center'>{item.status} </td>
-                <td className='p-2 text-center'>
-                  <div className="inline-flex text-[12px]">
-                    {/* <button
-                      onClick={() => gotoDetailPage(item._id)}
-                      className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4"
-                    >
-                      detail
-                    </button> */}
-                    <button
-                      onClick={() => onConfirmDelete(item._id)}
-                      className="bg-red-300 hover:bg-red-400 text-gray-800 py-2 px-4 rounded-r">
-                      Batalkan
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </Card>
+    const ITEM_COLUMNS = [
+        { header: 'kode Barang', field: 'kodeBarang' },
+        { header: 'Nama', field: 'namaPemohon' },
+        { header: 'jumlah', field: 'jumlah' },
 
+        { header: 'ket', field: 'keterangan' },
+        { header: 'date', field: 'date' },
+        { header: 'status', field: 'status' },
+      { 
+        header: 'Action', 
+        field: 'actions', // Use a unique field name like 'actions'
+        // Define the render function (or component) for this column:
+        render: (item) => (
+            <div className="inline-flex text-[12px]">
+              {/* <button 
+                                            onClick={()=>gotoEditPage(item)}
+                                            className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4">
+                                            Edit
+                                        </button> */}
+                                        {item.status === 'pending' && (
+        <button
+          onClick={() => onConfirmDelete(item)}
+          className="bg-red-300 hover:bg-red-400 text-gray-800 py-2 px-4 rounded-r"
+        >
+          Batalkan
+        </button>
+      )}
+                                        {item.status === 'approve' && (
+        <button
+          disabled
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-r disabled:opacity-50 
+    disabled:bg-gray-400
+    disabled:cursor-not-allowed"
+        >
+          Batalkan
+        </button>
+      )}
+                                        
+            </div>
+        )
+    }
+   
+];
+    return (
+        <>
+         <SearchBar 
+                    onSearchChange={handleSearchChange}
+                    searchTerm={searchTerm}
+        />
+       <PaginatedTable data={filteredData} columns={ITEM_COLUMNS} itemsPerPage={10} title="List Permintaan"  />
+       
       <ConfigDialog
         onOkOny={() => onCancel()}
         showDialog={modal}

@@ -1,5 +1,7 @@
 'use client'
 import Card from '../../../../components/card';
+import PaginatedTable from '../../../../components/PaginatedTable';
+
 import { useRouter} from 'next/navigation';
 import { useEffect, useState } from 'react';
 import ConfigDialog from '../../../../components/ConfirmDialog';
@@ -23,9 +25,10 @@ export default function AdminPengguna() {
         router.push('/admin/pengguna/form')
     }
 
-    const onConfirmDelete=(id)=>{
-        setDeleteId(id)
-        setIsOkOnly(false)
+    const onConfirmDelete=(item)=>{
+const itemId = item._id; // <-- The ID is extracted here
+ setDeleteId(itemId)
+            setIsOkOnly(false)
         setModalTitle('Confirm')
         setModalMessage('Apakah and yakin ingin menghapus data ini?')
         setModal(true)
@@ -78,9 +81,36 @@ console.log(data.data)
         fetchData();
       }, []); // Re-run fetchData on searchTerm change
     
-    const gotoEditPage=(id)=>{
-        router.push(`/admin/pengguna/edit/${id}`)
+    const gotoEditPage=(item)=>{
+        router.push(`/admin/pengguna/edit/${item._id}`)
     }
+
+ const ITEM_COLUMNS = [
+        { header: 'Nama', field: 'nama' },
+        { header: 'Email', field: 'email' },
+        { header: 'role', field: 'role' },
+
+      { 
+        header: 'Action', 
+        field: 'actions', // Use a unique field name like 'actions'
+        // Define the render function (or component) for this column:
+        render: (item) => (
+            <div className="inline-flex text-[12px]">
+              <button 
+                                            onClick={()=>gotoEditPage(item)}
+                                            className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4">
+                                            Edit
+                                        </button>
+                                        <button 
+                                            onClick={()=>onConfirmDelete(item)}
+                                            className="bg-red-300 hover:bg-red-400 text-gray-800 py-2 px-4 rounded-r">
+                                            Delete
+                                        </button>
+            </div>
+        )
+    }
+   
+];
 
     return (
         <>
@@ -88,64 +118,8 @@ console.log(data.data)
                     onSearchChange={handleSearchChange}
                     searchTerm={searchTerm}
         />
-        <Card title="List of pengguna" style="mt-5" showAddBtn onAddNew={onAddNew}>
-            <table className="table-auto w-full">
-                <thead>
-                    <tr>
-                        <th className='table-head border-blue-gray-100'>No</th>
-                        <th className='table-head border-blue-gray-100'>Nama</th>
-                        <th className='table-head border-blue-gray-100'>Email</th>
-                        <th className='table-head border-blue-gray-100'>Role</th>
-                        <th className='table-head border-blue-gray-100'>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                  
-                    {filteredData.map((item, key) => {
-                        if (isLoading) {
-                            return (
-                                <tr key={key} className='border-b border-blue-gray-50 '>
-                                    <td className='p-2 text-center'>Loading...</td>
-                                    <td className='p-2 '></td>
-                                    <td className='p-2 '></td>
-                                    <td className='p-2 '></td>
-                                </tr>
-                            )
-                        }
-                        return (
-                            <tr key={key} className='border-b border-blue-gray-50 '>
-                                <td className='p-2 text-center'>{key+1}</td>
-                                <td className='p-2 text-center'>{item.nama} </td>
-                                <td className='p-2 text-center'>{item.email} </td>
-                                <td className='p-2 text-center'>{item.role} </td>
-                                <td className='p-2 text-center'>
-                                    <div className="inline-flex text-[12px]">
-                                        {/* <button
-                                        onClick={()=>goToDetail(item._id)}
-                                        className=" bg-green-300 hover:bg-green-400 text-gray-800 py-2 px-4 rounded-l">
-                                            Detail
-                                        </button> */}
-                                        <div className='mx-auto p-2'>
-                                        <button 
-                                            onClick={()=>gotoEditPage(item._id)}
-                                            className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4">
-                                            Edit
-                                        </button>
-                                        <button 
-                                            onClick={()=>onConfirmDelete(item._id)}
-                                            className="bg-red-300 hover:bg-red-400 text-gray-800 py-2 px-4 rounded-r">
-                                            Delete
-                                        </button>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        )
-                    })
-                    }
-                </tbody>
-            </table>
-        </Card>
+       <PaginatedTable data={filteredData} columns={ITEM_COLUMNS} itemsPerPage={10} title="List Pengguna" showAddBtn onAddNew={onAddNew} />
+       
 
         <ConfigDialog
         onOkOny={() => onCancel()}
